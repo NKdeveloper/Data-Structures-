@@ -1,0 +1,295 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.util.Scanner;
+import java.util.*;
+
+/**
+ * Path Finding Algorithm that allows user to enter in a start and end node and it calculates a path between them with the lowest cost
+ *
+ * @author Nikhil Kanamarla
+ * @version 1.3
+ */
+public class DJAlgorithms {
+
+// important variables top be used in the project
+    static Heap methodCaller = new Heap();
+    static boolean end = false;
+    static int z = 0;
+    static int x = 0;
+    static int total = 0;
+    static int startnode;
+    static int endnode;
+    static int[][] storage;
+    static int[] distance;
+    static ArrayList<Integer> visted = new ArrayList<Integer>();
+    static int numberOfHeap;
+    static int max = 999999999;
+
+
+
+    public static void main(String args[]) {
+            try {
+                // Allows user to enter starting and ending nodes or quit the program
+                System.out.println("Welcome to bloody DJ town");
+                System.out.println("Pick a starting node (starts from 0) (quit by entering -1)");
+                Scanner input = new Scanner(System.in);
+                startnode = input.nextInt();
+                if (startnode == -1) {
+                    System.out.println("thanks for coming to DJ town");
+
+                    System.exit(0);
+                }
+                System.out.println("the user choose startnode " + startnode);
+
+                System.out.println("Pick an ending node (quit by entering -1)");
+                Scanner input2 = new Scanner(System.in);
+                endnode = input2.nextInt();
+                if (endnode == -1) {
+                    System.out.println("thanks for coming to DJ town");
+                    System.exit(0);
+                }
+                System.out.println("the user choose endnode " + endnode);
+
+                set(0, startnode);
+
+                // Reading in the matrix file
+                Scanner store = new Scanner(new BufferedReader(new FileReader("/Users/ElonMusk/IdeaProjects/DJAlgorithms/src/DJ.txt")));
+
+                // Creating a 2D array with the matrix values
+                if (store.hasNextInt()) {
+                    total = store.nextInt();
+
+                    storage = new int[total][total];
+                    distance = new int[total];
+
+                    while (store.hasNextInt()) {
+
+                        for (z = 0; z < total; z++) {
+
+
+                            for (x = 0; x < total; x++) {
+
+                                storage[z][x] = store.nextInt();
+
+                                System.out.println(storage[z][x]);
+
+                            }
+                        }
+                    }
+
+                }
+
+                // Populating the distance array with the inital values
+                for (int i = 0; i < total; i++) {
+
+                    distance[i] = max;
+
+                    if (i == 0) {
+                        distance[i] = 0;
+                    }
+
+                    System.out.println("current distance " + distance[i]);
+
+                }
+                System.out.println(" ");
+                System.out.println(" ");
+
+                // Send the startnode to the DJ algroithmn
+                determine(startnode);
+
+
+            } catch (Exception e) {
+                System.out.println("Error" + e.getMessage());
+                e.printStackTrace();
+                System.exit(0);
+            }
+        }
+    // @param the sent in start node
+    // DJ algrithmn finds the best path from one node to another by comparing paths and finding the lowest cost in a recursive process
+    public static void determine(int start) {
+        while(start != endnode) {
+
+            int temp = 0;
+            int tempIndex = 0;
+            int previousTemp = 999999999;
+            while (temp < total) {
+                if (storage[start][temp] > 0 && !(visted.contains(temp))) {
+
+                    if (storage[start][temp] < previousTemp) {
+                        previousTemp = storage[start][temp];
+                        tempIndex = temp;
+                        distance[tempIndex] = storage[start][temp];
+                    }
+                }
+
+                temp++;
+            }
+            set(distance [tempIndex], tempIndex);
+            determine(tempIndex);
+        }
+
+    }
+
+    // @param the sent in new node and distance
+    // Sets the new node, adds it to the visted list and prints out the path at the end
+    public static void set(int distance ,int index) {
+        Heap.insert(distance, index);
+        numberOfHeap++;
+        if(!(visted.contains(index))) {
+            visted.add(index);
+        }
+        if(index == endnode) {
+        for(int i = 0; i < numberOfHeap; i++) {
+            System.out.println("Path Node " + i + ":" + " " + Heap.peekNode());
+            Heap.delete();
+        }
+        System.out.println("thanks for visiting, it was insanely great!");
+        Scanner input3 = new Scanner(System.in);
+        System.out.println("Would you like to continue? 0 for yes, -1 for no");
+        int userIntput = input3.nextInt();
+        if(userIntput == -1) {
+            System.out.println("thanks for visiting, it was insanely great!");
+            System.exit(0);
+        }
+        if(userIntput == 0) {
+            visted.clear();
+            numberOfHeap = 0;
+            main(null);
+        }
+
+        }
+    }
+
+}
+
+import java.util.*;
+
+public class Heap {
+    static int Pair;
+    static ArrayList<Pair> list = new ArrayList<Pair>();
+
+    /**
+     * Add object to heap
+     *
+     * @param v initial cost
+     * @param n node number
+     */
+    public static void insert(int v, int n) {
+        list.add(new Pair(v, n));
+        int curr = list.size() - 1; //current index of array for sifting
+        boolean done = false;
+        while (!done) {
+            int parent = (curr - 1) / 2;
+            if (parent < 0) {
+                done = true;
+            } else if (list.get(curr).weight < list.get(parent).weight) {
+                Pair swap = list.get(curr);
+                list.set(curr, list.get(parent));
+                list.set(parent, swap);
+                curr = parent;
+            } else {
+                done = true;
+            }
+        }
+    }
+
+    /**
+     * Delete the top object
+     *
+     * @return weight value of top object
+     * 1-12-2017: delete now handles deleting the final node and can handle nodes with weights
+     * equal to Integer.MAX_VALUE
+     */
+    public static int delete() {
+        int temp;
+        temp = list.get(0).weight;
+
+        list.set(0, list.get(list.size() - 1));
+        list.remove(list.size() - 1);
+
+        int curr = 0;
+        boolean done = false;
+        if (list.size() == 0) done = true;
+        while (!done) {
+            int rchild = (curr + 1) * 2;
+            int lchild = (curr + 1) * 2 - 1;
+            int cw = list.get(curr).weight;
+            int lcw = Integer.MAX_VALUE;
+            if (lchild < list.size()) lcw = list.get(lchild).weight;
+            int rcw = Integer.MAX_VALUE;
+            if (rchild < list.size()) rcw = list.get(rchild).weight;
+            if (cw <= lcw && cw <= rcw) {
+                done = true;
+            } else if (lcw < rcw) {
+                Pair swap = list.get(lchild);
+                list.set(lchild, list.get(curr));
+                list.set(curr, swap);
+                curr = lchild;
+            } else {
+                Pair swap = list.get(rchild);
+                list.set(rchild, list.get(curr));
+                list.set(curr, swap);
+                curr = rchild;
+            }
+        }
+
+        return temp;
+    }
+
+    /**
+     * Look at weight value of top object
+     *
+     * @return weight value of top object
+     */
+    public int peek() {
+        int temp = list.get(0).weight;
+        return temp;
+    }
+
+    /**
+     * Look at the value of top object
+     *
+     * @return node value of top object
+     */
+    public static int peekNode() {
+        int temp;
+        temp = list.get(0).node;
+        return temp;
+    }
+
+    /**
+     * Balance the heap
+     */
+    public void balance() {
+        Collections.sort(list);
+
+    }
+
+    public void debugPrint() {
+        for (Pair x : list) {
+            System.out.println(x.weight + "," + x.node);
+        }
+    }
+
+    private static class Pair implements Comparable<Pair> {
+        public final Integer weight;
+        public final Integer node;
+
+        public Pair(int w, int n) {
+            this.weight = w;
+            this.node = n;
+        }
+
+        @Override
+        public int compareTo(Pair s) {
+            return weight.compareTo(s.weight);
+        }
+    }
+}
+Sample file: 
+5
+0 14 0 0 0
+0 0 3 10 0
+0 0 0 4  0
+0 0 0 0 10
+0 0 0 0 0
