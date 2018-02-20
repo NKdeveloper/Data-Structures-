@@ -121,58 +121,58 @@ public class InfiniteAdder
 }
 
 
- - * Write a description of class NodeResources here.		
- - * 		
- - * @author (your name) 		
- - * @version (a version number or a date)		
- - */		
- -public class NodeResources extends InfiniteAdder		
- -{		
- -    // important variable used in methods below 		
- -    int NodeResources;		
- -		
- -    // Helps setup nodes		
- -    NodeResources next;		
- -    NodeResources prev;		
- -    		
- -    // setter method sets up linked list 		
- -    //@param integer d means the value of variable above 		
- -    public NodeResources (int d) { 		
- -        NodeResources = d;		
- -    }		
- -    		
- -    //@return getter method sends value of node		
- -       public int getNodeResources() {		
- -        return NodeResources;		
- -    }		
- -    		
- -    //@param integer d means the value variable above		
- -    // setter method sets values of nodes		
- -       public void setNodeResources(int d) {		
- -        NodeResources = d;		
- -    }		
- -		
- -     // getter method moves to new node		
- -     //@return sends next node 		
- -       public NodeResources getNext() {		
- -        return next;		
- -    }		
- -		
- -    //@param means NodeResources which helps setup new node		
- -    // setter method sets new node value		
- -       public void setNext(NodeResources d) {		
- -        next = d;		
- -    }		
- -    		
- -     // getter method moves to previous nodes		
- -     //@return sends last node		
- -       public NodeResources getPrev() {		
- -        return prev;		
- -    }		
- -		
- -     // setter method sets previous node value		
- -       public void setPrev(NodeResources d) {		
- -        prev = d;		
- -    }		
- -}
+  * Write a description of class NodeResources here.		
+  * 		
+  * @author (your name) 		
+  * @version (a version number or a date)		
+  */		
+ public class NodeResources extends InfiniteAdder		
+ {		
+     // important variable used in methods below 		
+     int NodeResources;		
+ 		
+     // Helps setup nodes		
+     NodeResources next;		
+     NodeResources prev;		
+     		
+     // setter method sets up linked list 		
+     //@param integer d means the value of variable above 		
+     public NodeResources (int d) { 		
+         NodeResources = d;		
+     }		
+     		
+     //@return getter method sends value of node		
+        public int getNodeResources() {		
+         return NodeResources;		
+     }		
+     		
+     //@param integer d means the value variable above		
+     // setter method sets values of nodes		
+        public void setNodeResources(int d) {		
+         NodeResources = d;		
+     }		
+ 		
+      // getter method moves to new node		
+      //@return sends next node 		
+        public NodeResources getNext() {		
+         return next;		
+    }		
+ 		
+     //@param means NodeResources which helps setup new node		
+     // setter method sets new node value		
+        public void setNext(NodeResources d) {		
+         next = d;		
+     }		
+     		
+      // getter method moves to previous nodes		
+      //@return sends last node		
+        public NodeResources getPrev() {		
+         return prev;		
+     }		
+ 		
+      // setter method sets previous node value		
+        public void setPrev(NodeResources d) {		
+         prev = d;		
+     }		
+ }
 
